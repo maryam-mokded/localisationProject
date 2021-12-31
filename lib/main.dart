@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +31,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Location _location = Location();
+  late LocationData _locationData;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getPosition();
+  }
+
+  Future<void> _getPosition() async {
+      try{
+          _locationData = await _location.getLocation();
+      }catch(e){
+          print('get position error : $e ');
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +62,14 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'Your location is:',
             ),
+          Text(
+            _locationData == null ?'Waiting For Position ' : 'Latitude :${_locationData.latitude}',
+            style:Theme.of(context).textTheme.headline4,
+          ),
+          Text(
+            _locationData == null ?'Waiting For Position ' : 'Longitude :${_locationData.longitude}',
+            style:Theme.of(context).textTheme.headline4,
+          ),
           ],
         ),
       ),
